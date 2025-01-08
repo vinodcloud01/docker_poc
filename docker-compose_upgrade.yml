@@ -1,0 +1,23 @@
+services:
+  influxdb-upgrade:
+    image: influxdb:2.7
+    container_name: influxdb_upgrade
+    command: influxd upgrade \
+      --v1-dir /var/lib/influxdb1 \
+      --v2-dir /var/lib/influxdb2 \
+      --force
+    volumes:
+      - influxdb-data:/var/lib/influxdb2  # Persistent data storage
+      - influxdb-config:/etc/influxdb2   # Custom configuration files
+      - influxdb1_data_volume-copy:/var/lib/influxdb
+      - influxdb1_config_volume-copy:/etc/influxdb
+
+volumes:
+  influxdb-data:
+    name: influxdb_data_volume
+  influxdb-config:
+    name: influxdb_config_volume
+  influxdb1_data_volume-copy:
+    name: influxdb1_data_volume-copy
+  influxdb1_config_volume-copy:
+    name: influxdb1_config_volume-copy
